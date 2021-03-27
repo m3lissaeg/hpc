@@ -1,8 +1,10 @@
 import random, time
 from resource import getrusage as resource_usage, RUSAGE_SELF
 import matplotlib.pyplot as plt
-import pandas as pd
-from os import fork
+# import pandas as pd
+import os
+from multiprocessing import Process
+NUM_OF_PROCESS = 4
 
 
 #Create matrix
@@ -31,19 +33,52 @@ def createMatrix(n):
 
 
 #Multiply Matrix
-def multiplyMatrix(matrix1, matrix2, result):
+def multiplyParallelMatrix(start, end, matrix1, matrix2, result):
+    # iterate through rows of matrix1 int that were assigned o that Process
+    for i in range(start, end):
+        # iterate through columns of matrix2
+        for j in range(n):
+            # iterate through rows of matrix2
+            for k in range(n):
+                result[i][j] += matrix1[i][k] * matrix2[k][j]
+            
+def forkProcessFunction(matrix1, matrix2, result, n):
+    global NUM_OF_PROCESS
+    process_handle = []
+    row_range = int(n/NUM_OF_PROCESS)
+    # Calculating the offset
+    offset = n % NUM_OF_PROCESS
+    # Start time counting
     start_resources = resource_usage(RUSAGE_SELF)
-    #iterate through rows of matrix1
-    for i in range(n):
-       # iterate through columns of matrix2
-       for j in range(n):
-           # iterate through rows of matrix2
-           for k in range(n):
-               result[i][j] += matrix1[i][k] * matrix2[k][j]
+
+    for j in range(0, NUM_OF_PROCESS):
+
+        # If the number if rows can be divided by the number of Process
+        if offset == 0:
+            t = Process(target=multiplyParallelMatrix, args=(
+                int((row_range) * j), int((row_range) * (j+1)) , matrix1, matrix2, result) )
+        else:
+            # if there are remaining rows
+            if j == NUM_OF_PROCESS - 1:
+                t = Process(target=multiplyParallelMatrix, args=(
+                    int((row_range) * j), int(((row_range) * (j+1))+offset) ,matrix1, matrix2, result ) )
+            else:
+                t = Process(target=multiplyParallelMatrix, args=(
+                    int((row_range) * j), int((row_range) * (j+1)) , matrix1, matrix2, result  ))
+
+        process_handle.append(t)
+        t.start()
+
+    for j in range(0, NUM_OF_PROCESS):
+        process_handle[j].join()
+
+    # End time counting
     end_resources = resource_usage(RUSAGE_SELF)
     timeCPU = end_resources.ru_utime - start_resources.ru_utime
-    # print("Matrix multiplication in {0:.10f} seconds".format(timeCPU))
+   # print("Sum in {0:.10f} seconds".format(timeCPU))
     return timeCPU
+
+
 
 # Average Function
 def average(list): 
@@ -79,17 +114,9 @@ if __name__ == "__main__":
         for n in matrixSizeN:
             #Execution for serial matrixMult
             matrix1, matrix2, result = createMatrix(n)
-            # Create the fork, associated to process ID
-            # pid = os.fork()
-            
-            # if pid > 0:
-            #    print("PID of Parent process is : ", os.getpid())
 
-            # else:
-            #    print("PID of Child process is : ", os.getpid())
-
-
-            time = multiplyMatrix(matrix1, matrix2, result)
+            # time = multiplyMatrix(matrix1, matrix2, result)
+            time = forkProcessFunction(matrix1, matrix2, result, n)
 
             # print('Multi matrix size: {} . Loop: {} .Time: {}'.format(n,i, concTime))
 
@@ -114,6 +141,7 @@ if __name__ == "__main__":
 
      # xAxis = averageTime    yAxis = matrixSize
     averageSerialTimeList = averageTime(size100, size120, size140, size160, size180,size200,size220,size240)
+    print(averageSerialTimeList)
 
     
     
