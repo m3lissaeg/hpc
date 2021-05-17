@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-void calculatePi(int size){
+int calculatePartialPi(int size){
     srand((unsigned int)time(NULL));
     int acum = 0;    
     for (int i=0;i<size;i++){
@@ -14,22 +14,39 @@ void calculatePi(int size){
         if (diff <=0){
             acum +=1;
         }
+    return acum;
     }    
-    float proportion = (float)acum/ (float)size;
+    return acum;
+}
+
+int calculatePI(int size){
+    
+    int threads = 10; 
+    int arrayPartialSum[threads];
+    int asserts = 0;
+
+    for(int i = 0; i < threads; i++){
+        int partialSize = size/ threads;
+        int partialAsserts = calculatePartialPi(partialSize); 
+        asserts += partialAsserts;
+        arrayPartialSum[i]= partialAsserts;
+    }
+
+    float proportion = (float)asserts/ (float)size;
     float calculatedPi = 2 / proportion;
 }
 
-double main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-    int size = 100000 ;    
+    int size = 10000000 ;    
     clock_t start, end;
 
     start = clock();
-    calculatePi(size);
+    calculatePI(size);
     end = clock();
 
     double totalTime = (double)(end - start) / CLOCKS_PER_SEC;
     // printf("Valor calculado de pi %f en  %f  s", calculatedPi, totalTime); 
     printf(" %f ", totalTime); 
-    return totalTime;
+    return 0;    
 }
