@@ -1,12 +1,14 @@
+//to run, you must exec gcc program.c -lm -pthread to avoid math, pthread lib problems
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
 #include <pthread.h>
-#define numOfThreads 25 
+#define numOfThreads 4 
 #define size 10000000 
 int arrayPartialSum[numOfThreads] = {0};
 int valueofI = 0;
+int valueofAcum = 0;
 
 void * calculatePartialPi( void * arg){
     int * i = (int *) arg;
@@ -23,9 +25,10 @@ void * calculatePartialPi( void * arg){
             acum +=1;
         }
     }
-
+    valueofAcum = valueofAcum +acum;
     arrayPartialSum[valueofI] = acum;    
-    printf("%d \n", valueofI);
+    // printf("%d \n", acum);
+    // return (int *)acum;
 }
 
 float calculatePI( ){
@@ -47,14 +50,10 @@ float calculatePI( ){
             exit(0);
         }
         pthread_join(thread[i], NULL);
+        printf("%d \n", status);
     }
 
-    for(int i = 0; i < numOfThreads; i++){
-        asserts += arrayPartialSum[i];
-    }   
-    
-
-    float proportion = (float)asserts/ (float)size;
+    float proportion = (float)valueofAcum/ (float)size;
     float calculatedPi = 2 / proportion;
     
     return calculatedPi;

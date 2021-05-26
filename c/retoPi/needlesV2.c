@@ -1,3 +1,4 @@
+//to run, you must exec gcc needlesV2.c -lm to avoid math lib problems
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>

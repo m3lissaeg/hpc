@@ -1,3 +1,4 @@
+//to run, you must exec gcc needles.c -lm to avoid math lib problems
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -27,6 +28,6 @@ int main(int argc, char *argv[])
 
     double totalTime = (double)(end - start) / CLOCKS_PER_SEC;
     // printf("Valor calculado de pi %f en  %f  s", calculatedPi, totalTime); 
-    printf(" %f ", totalTime); 
+    printf("%f ", totalTime); 
     return acum;
 }
