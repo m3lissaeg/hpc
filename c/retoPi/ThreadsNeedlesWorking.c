@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     end = clock();
 
     double totalTime = (double)(end - start) / CLOCKS_PER_SEC;
-    printf("Valor calculado de pi %f en  %f  s", calculatedPi, totalTime); 
+    // printf("Valor calculado de pi %f en  %f  s", calculatedPi, totalTime); 
     printf(" %f ", totalTime); 
     return 0;    
 }
