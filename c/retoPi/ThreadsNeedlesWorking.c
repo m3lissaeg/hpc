@@ -5,7 +5,7 @@
 #include <time.h>
 #include <pthread.h>
 #define numOfThreads 4 
-#define size 10000000 
+#define size 1000000 
 int arrayPartialSum[numOfThreads] = {0};
 int valueofI = 0;
 int valueofAcum = 0;
@@ -50,7 +50,6 @@ float calculatePI( ){
             exit(0);
         }
         pthread_join(thread[i], NULL);
-        printf("%d \n", status);
     }
 
     float proportion = (float)valueofAcum/ (float)size;
@@ -70,6 +69,6 @@ int main(int argc, char *argv[])
 
     double totalTime = (double)(end - start) / CLOCKS_PER_SEC;
     // printf("Valor calculado de pi %f en  %f  s", calculatedPi, totalTime); 
-    printf(" %f ", totalTime); 
+    printf(" %f \n", totalTime); 
     return 0;    
 }

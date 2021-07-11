@@ -40,7 +40,7 @@ float calculatePI(int size){
 
 int main(int argc, char *argv[])
 {
-    int size = 10000000 ;    
+    int size = 100000000 ;    
     clock_t start, end;
 
     start = clock();
@@ -49,6 +49,6 @@ int main(int argc, char *argv[])
 
     double totalTime = (double)(end - start) / CLOCKS_PER_SEC;
     printf("Valor calculado de pi %f en  %f  s", calculatedPi, totalTime); 
-    printf(" %f ", totalTime); 
+    // printf(" %f \n", totalTime); 
     return 0;    
 }
