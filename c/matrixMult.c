@@ -51,6 +51,6 @@ int main()
     long microseconds = end.tv_usec - begin.tv_usec;
     double elapsed = seconds + microseconds*1e-6;
 
-    printf("%f", elapsed);
+    printf("%f \n", elapsed);
     return 0;
 }

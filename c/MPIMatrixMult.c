@@ -9,15 +9,15 @@
 
 int main (int argc, char *argv[])
 {
-int	numtasks,              /* number of tasks in partition */
-	taskid,                /* a task identifier */
-	numworkers,            /* number of worker tasks */
-	source,                /* task id of message source */
-	dest,                  /* task id of message destination */
-	mtype,                 /* message type */
-	rows,                  /* rows of matrix A sent to each worker */
-	averow, extra, offset, /* used to determine rows sent to each worker */
-	i, j, k, rc;           /* misc */
+int   numtasks,              /* number of tasks in partition */
+	   taskid,                /* a task identifier */
+	   numworkers,            /* number of worker tasks */
+	   source,                /* task id of message source */
+	   dest,                  /* task id of message destination */
+	   mtype,                 /* message type */
+	   rows,                  /* rows of matrix A sent to each worker */
+	   averow, extra, offset, /* used to determine rows sent to each worker */
+	   i, j, k, rc;           /* misc */
 double	a[MATSIZE][MATSIZE],           /* matrix A to be multiplied */
 	b[MATSIZE][MATSIZE],           /* matrix B to be multiplied */
 	c[MATSIZE][MATSIZE];           /* result matrix C */
